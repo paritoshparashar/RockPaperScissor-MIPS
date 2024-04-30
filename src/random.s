@@ -19,6 +19,12 @@
 #
 gen_byte:
   # TODO
+  
+  move $t0 $ra 
+  jal gen_bit
+  
+  loop:
+  	
   jr $ra
 
 # Arguments:
@@ -36,4 +42,12 @@ gen_byte:
 #
 gen_bit:
   # TODO
+  move $t1 $a0
+  lw $a0 0($a0)
+  li $v0 41
+  syscall
+  
+  andi $v0 $a0 1
+  move $a0 $t1
+  
   jr $ra
