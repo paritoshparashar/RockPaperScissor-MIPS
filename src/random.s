@@ -48,6 +48,6 @@ gen_bit:
   syscall
   
   andi $v0 $a0 1
-  move $a0 $t1
+  move $a0 $t1 #testing commit 
   
   jr $ra
