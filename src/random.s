@@ -20,26 +20,26 @@
 gen_byte:
   # TODO
   
-  move	$t0	$ra
+ 	move	$t0	$ra
   
   first_bit:
-  	jal	gen_bit  #puts the first bit in v0
+  	jal	gen_bit  			#puts the first bit in v0
   	
   	beqz	$v0	direct_second_bit
   	
-  	sll	$t1	$v0	1	#left shift the first bit received by 1
+  	sll	$t1	$v0	1		#left shift the first bit received by 1
   	
   conditional_second_bit:
   	
-  	jal	gen_bit	#puts the second bit in v0
+  	jal	gen_bit				#puts the second bit in v0
   	
-  	bnez	$v0	first_bit	#if second bit is 1, restart
-  	move	$v0	$t1		#else the result woulbe be 10, which is already in $t1
+  	bnez	$v0	first_bit		#if second bit is 1, restart
+  	move	$v0	$t1			#else the result woulbe be 10, which is already in $t1
   	b	end
   
   direct_second_bit:
   	
-  	jal	gen_bit	#if the first bit was 0, then the 2bit result will be the second bit only
+  	jal	gen_bit				#if the first bit was 0, then the 2bit result will be the second bit only
   	
   
   end:
@@ -61,12 +61,12 @@ gen_byte:
 #
 gen_bit:
   # TODO
-  move $t7 $a0
-  lw $a0 0($a0)
-  li $v0 41
-  syscall
+ 	move 	$t7 	$a0			#save the conf address
+  	lw 	$a0 	0($a0)			#load the appropirate PRNG 
+  	li 	$v0 	41
+  	syscall
   
-  andi $v0 $a0 1
-  move $a0 $t7 #testing commit 
+  	andi 	$v0 	$a0 	1		#put the result in v0 after bitwise & with 1
+ 	move 	$a0 	$t7
   
-  jr $ra
+  	jr 	$ra
