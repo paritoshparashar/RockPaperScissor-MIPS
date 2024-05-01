@@ -20,12 +20,31 @@
 gen_byte:
   # TODO
   
-  move $t0 $ra 
-  jal gen_bit
+  move	$t0	$ra
   
-  loop:
+  first_bit:
+  	jal	gen_bit  #puts the first bit in v0
   	
-  jr $ra
+  	beqz	$v0	direct_second_bit
+  	
+  	sll	$t1	$v0	1	#left shift the first bit received by 1
+  	
+  conditional_second_bit:
+  	
+  	jal	gen_bit	#puts the second bit in v0
+  	
+  	bnez	$v0	first_bit	#if second bit is 1, restart
+  	move	$v0	$t1		#else the result woulbe be 10, which is already in $t1
+  	b	end
+  
+  direct_second_bit:
+  	
+  	jal	gen_bit	#if the first bit was 0, then the 2bit result will be the second bit only
+  	
+  
+  end:
+  	move	$ra	$t0
+  	jr $ra
 
 # Arguments:
 #     $a0 : address of configuration in memory
@@ -42,12 +61,12 @@ gen_byte:
 #
 gen_bit:
   # TODO
-  move $t1 $a0
+  move $t7 $a0
   lw $a0 0($a0)
   li $v0 41
   syscall
   
   andi $v0 $a0 1
-  move $a0 $t1 #testing commit 
+  move $a0 $t7 #testing commit 
   
   jr $ra
