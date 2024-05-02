@@ -48,6 +48,8 @@ print_tape:
   	loop:
   		
   		and	$t3	$t0	$t2	# get the 8th least significant bit
+  		srl	$t3	$t3	7	# shift to get the and bit
+  		sll	$t0	$t0	1	# shift t0 to move the 7th bit to 8th position
   		
   		bnez 	$t3	print_charX
   		beqz	$t3	print_char_
@@ -56,6 +58,7 @@ print_tape:
   		
   		subi	$t1	$t1	1
   		bnez 	$t1	loop
+  		b	end
   		
   	print_charX:
   	
@@ -72,7 +75,8 @@ print_tape:
   		b	condition_end
   		
   ############################
-  		
+  end:
+  
   lw	$a0	0($sp)
   addi	$sp	$sp	4
   jr $ra
