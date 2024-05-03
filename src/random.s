@@ -61,8 +61,19 @@ gen_byte:
 #
 gen_bit:
   # TODO
- 	move 	$t7 	$a0			#save the conf address
-  	lw 	$a0 	0($a0)			#load the appropirate PRNG 
+  lw	$t6	0($a0)
+  bnez 	$t6	calc_id
+  
+  move 	$t7 	$a0			#save the conf address
+  li 	$a0 	0		#load the appropirate PRNG 
+  b	bit_gen
+  
+  calc_id:
+  	# code in the calc_id label for the last task
+	#replicate for now 
+  	li	$a0 	0		#load the appropirate PRNG 
+
+  bit_gen:	
   	li 	$v0 	41
   	syscall
   
