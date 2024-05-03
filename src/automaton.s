@@ -77,6 +77,11 @@ print_tape:
   ############################
   end:
   
+  li	$a0	10		# print new line character
+  li	$v0	11
+  syscall	
+  
+  
   lw	$a0	0($sp)
   addi	$sp	$sp	4
   jr $ra
