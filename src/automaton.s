@@ -15,6 +15,90 @@
 # Returns: Nothing, but updates the tape in memory location 4($a0)
 simulate_automaton:
   # TODO
+  
+  lw 	$t9	4($a0)		# t9 = tape encoding
+  lb	$t8	8($a0)		# t8 = tape length
+  lb	$t7	12($a0)		# t7 = rule
+  li	$t6	7		# t6 = 0...111 initially in binary for doing and operation
+  li	$t3	0		# t3 = 1 initially, = offset, we will increment it as we go along the tape
+  
+ 
+  
+  # ------------ loaded the necessary ----------------- #
+  
+  first_bit: 
+  
+  	subi	$t8	$t8	1	# decrease the length by 1
+  	
+  	li	$t2	3		# t2 = mask, t2 = 3 = (0...11)in binary, because here we need last 2 sig bits
+  	and	$t5	$t9	$t2	# here t5 = last 2 sig bit seq
+  	sll	$t5	$t5	1	# make room for the third digit (most sig bit in this case)
+  	
+  	li	$t2	1		# now we want only 1 bit
+  	sllv	$t2	$t2	$t8	# shift the mask by the offset of length of tape	
+  	and	$t1	$t9	$t2	# t1 = most sig bit
+  	
+  	beqz  	$t1	apply_rule
+  		
+  		add1:
+  			addi	$t5	$t5	1	# doing this will set the least sig bit of t5 from 0 to 1
+  	
+  	b	apply_rule
+  	
+  	
+  middle_bits:
+  	
+  	blt	$t8	1	end_loop	
+  	blt  	$t8	2	end_bit		#conditions for loop 	
+  	
+  	and	$t5	$t9	$t6	# t5 = the 3 consecutive bits
+  	
+  	subi	$t8	$t8	1	# decrease the length by 1
+  	b	apply_rule
+  	
+  		apply_rule:
+  		  	li	$t2	1		# t2 = mask, we shift it by t3 bit, to get to the desired bit in t9
+  			srlv	$t4	$t7	$t5	# shift right t7 by the number in t5, now the least sig bit will be the next gen tape result
+  			andi	$t4	$t4	1	# t4 = result of rule (either 0 or 1)
+  			sllv	$t2	$t2	$t3	# t3 contains the shift amount to get to position corresponding to tape 
+  			addi	$t3	$t3	1	# increment t3
+  			b	change_tape
+  		
+  		change_tape:
+  			beqz	$t4	set_zero
+  			b	set_one
+  				
+  				set_one:
+  					or	$t9	$t9	$t2
+  					b	go_for_next_bit
+  					
+  				set_zero:
+  					not	$t2	$t2
+  					and	$t9	$t9	$t2
+  					b	go_for_next_bit
+  	go_for_next_bit:	
+  	b	middle_bits
+  
+ 
+  end_bit:
+  	
+  	andi	$t5	$t9	1	# get the last sig bit
+  	sll	$t5	$t5	2	# shift t5 2 bit, to make room for other 2 bits
+  	
+  	subi	$t3	$t3	1	# remove one extra offset to get first 2 most sig bits, increment it (for correct behaviour in change tape)
+  	li	$t2	3		# t2 = mask, t2 = 3 = (0...11)in binary, because here we need last 2 sig bits
+  	sllv	$t2	$t2	$t3	# shift done (now t2 = (11....0))
+  	and	$t1	$t9	$t2	# got the last 2 digits
+  	
+  	add	$t5	$t5	$t1	# t5 = 3 bit sequence
+  	
+  	addi	$t3	$t3	1	# reset it for correct calc
+    	subi	$t8	$t8	1	# decrease the length by 1
+  	b	apply_rule
+  
+  end_loop:
+  
+  sw	$t9	4($a0)
   jr $ra
 
 # Print the tape of the cellular automaton
