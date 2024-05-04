@@ -18,7 +18,7 @@ simulate_automaton:
   
   lw 	$t9	4($a0)		# t9 = tape encoding
   lb	$t8	8($a0)		# t8 = tape length
-  lb	$t7	12($a0)		# t7 = rule
+  lb	$t7	9($a0)		# t7 = rule
   li	$t6	7		# t6 = 0...111 initially in binary for doing and operation
   li	$t3	0		# t3 = 1 initially, = offset, we will increment it as we go along the tape
   li	$a3	0		# make a copy of t9 in a3, a3 will change t9 will stay same
