@@ -21,7 +21,7 @@ simulate_automaton:
   lb	$t7	12($a0)		# t7 = rule
   li	$t6	7		# t6 = 0...111 initially in binary for doing and operation
   li	$t3	0		# t3 = 1 initially, = offset, we will increment it as we go along the tape
-  
+  li	$a3	0		# make a copy of t9 in a3, a3 will change t9 will stay same
  
   
   # ------------ loaded the necessary ----------------- #
@@ -49,10 +49,12 @@ simulate_automaton:
   middle_bits:
   	
   	blt	$t8	1	end_loop	
-  	blt  	$t8	2	end_bit		#conditions for loop 	
+  	blt  	$t8	2	end_bit		#conditions for loop 
   	
-  	and	$t5	$t9	$t6	# t5 = the 3 consecutive bits
-  	
+  	subi	$t1	$t3	1		
+  	and	$t5	$t9	$t6	# t5 = the 3 consecutive bits with extra zero's to the right
+  	srlv	$t5	$t5	$t1
+  	sll	$t6	$t6	1	# shift t6 (0...111) as we move along the tape by offset 1 everytime
   	subi	$t8	$t8	1	# decrease the length by 1
   	b	apply_rule
   	
@@ -69,12 +71,12 @@ simulate_automaton:
   			b	set_one
   				
   				set_one:
-  					or	$t9	$t9	$t2
+  					or	$a3	$a3	$t2
   					b	go_for_next_bit
   					
   				set_zero:
   					not	$t2	$t2
-  					and	$t9	$t9	$t2
+  					and	$a3	$a3	$t2
   					b	go_for_next_bit
   	go_for_next_bit:	
   	b	middle_bits
@@ -89,7 +91,7 @@ simulate_automaton:
   	li	$t2	3		# t2 = mask, t2 = 3 = (0...11)in binary, because here we need last 2 sig bits
   	sllv	$t2	$t2	$t3	# shift done (now t2 = (11....0))
   	and	$t1	$t9	$t2	# got the last 2 digits
-  	
+  	srlv	$t1	$t1	$t3				
   	add	$t5	$t5	$t1	# t5 = 3 bit sequence
   	
   	addi	$t3	$t3	1	# reset it for correct calc
@@ -98,7 +100,7 @@ simulate_automaton:
   
   end_loop:
   
-  sw	$t9	4($a0)
+  sw	$a3	4($a0)
   jr $ra
 
 # Print the tape of the cellular automaton
