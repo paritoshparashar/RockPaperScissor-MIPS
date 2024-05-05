@@ -70,8 +70,45 @@ gen_bit:
   
   calc_id:
   	# code in the calc_id label for the last task
+  	#li	$a0 	0		#load the appropirate PRNG (if skip is 0 and eca is non zero)
+  	
 	#replicate for now 
-  	li	$a0 	0		#load the appropirate PRNG 
+	lb	$t1	10($a0) 	# t1 = skip
+	lb	$t2	11($a0)		# t2 = column
+	
+	loop_for_skip:	
+		
+		beqz	$t1	get_column_bit		# if skip = 0, branch
+		
+		addi	$sp	$sp	-16	#
+  		sw	$ra	0($sp)		#
+  		sw	$t1	4($sp)		#
+  		sw	$t2	8($sp)		#
+  		sw	$a0	12($sp)		#
+  		#---------------------------
+		jal	simulate_automaton	
+		#---------------------------
+		lw	$ra	0($sp)		#
+		lw	$t1	4($sp)		#
+		lw	$t2	8($sp)		#
+		lw	$a0	12($sp)		#
+  		addi	$sp	$sp	16	#
+  		
+  		subi	$t1	$t1	1
+  		
+  		b 	loop_for_skip
+  		
+  	
+	get_column_bit:
+		lw	$t6	4($a0)		# t6 = tape conf
+  	 	lb	$t3	8($a0)		# t3 = length of tape
+  	 	addi	$t2	$t2	1
+  	 	sub	$t2	$t3	$t2	# t2 = shift offset
+  	 	li	$t3	1
+  	 	sllv	$t3	$t3	$t2	# t3 = mask after shifting
+  	 	and	$v0	$t6	$t3	# a0 = columnth bit of tape
+  	 	srlv	$v0	$v0	$t2
+  	 	b 	return_bit
 
   bit_gen:	
   	li 	$v0 	41
@@ -80,4 +117,5 @@ gen_bit:
   	andi 	$v0 	$a0 	1		#put the result in v0 after bitwise & with 1
  	move 	$a0 	$t7
   
+  return_bit:
   	jr 	$ra
