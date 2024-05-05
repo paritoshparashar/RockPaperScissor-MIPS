@@ -31,7 +31,15 @@ gen_byte:
   	
   conditional_second_bit:
   	
+  	addi	$sp	$sp	-4	#
+  	sw	$t1	0($sp)
+  	#sw	$	4($sp)		#
+  	#--------------------------------	
   	jal	gen_bit				#puts the second bit in v0
+  	#--------------------------------
+  	lw	$t1	0($sp)		#
+  	#lw	$	4($sp)
+  	addi	$sp	$sp	4	#
   	
   	bnez	$v0	first_bit		#if second bit is 1, restart
   	move	$v0	$t1			#else the result woulbe be 10, which is already in $t1
