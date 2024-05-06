@@ -129,13 +129,21 @@ print_tape:
   	
   	lw	$t0	4($a0) 		# load tape config from mem 
   	lb	$t1	8($a0)		# load tape length from mem
-  	li	$t2	128		# load <10000000> base 2 in t2 
+  	li	$t2	1		# t2 = mask
+  	
+  	move 	$t9	$t1		
+  	subi	$t9	$t9	1	# shift offset for mask t2
+  	
+  	sllv	$t2	$t2	$t9	# t2 shift by tape length - 1
+  	
   	
   	loop:
   		
-  		and	$t3	$t0	$t2	# get the 8th least significant bit
-  		srl	$t3	$t3	7	# shift to get the and bit
-  		sll	$t0	$t0	1	# shift t0 to move the 7th bit to 8th position
+  		and	$t3	$t0	$t2	# get the nth least significant bit
+  		srlv	$t3	$t3	$t9	# t3 = computed bit; shift by offset t9 to get the 'and' bit 
+  		
+  		srl	$t2	$t2	1	# shift t2 by 1 each time
+  		subi	$t9	$t9	1	# sub off also by 1
   		
   		bnez 	$t3	print_charX
   		beqz	$t3	print_char_
