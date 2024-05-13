@@ -1,4 +1,4 @@
-# Rock Paper Scissors in Assembly
+# Rock_Paper_Scissors | Assembly (MIPS)
 
 ## Overview
 
@@ -6,9 +6,28 @@ In this project, we will implement the game rock paper scissors. Our implementat
 two player game in the fact that the computer will play against itself. To do this, we will randomly generate
 moves for both players, compare their selections and announce the winner!
 
-## Generating Random Numbers
 
-To generate pseudorandom numbers, the computer starts with an initial configuration, called the seed, algorithmically generating a chaotic sequence of numbers. Due to the deterministic nature of the random number generator, given the same seed twice, the algorithm will produce the same sequence of numbers twice. We will use known seed values to make our random programs reproducible.
+## Celluar Automata
+
+<table border="0">
+  <tr>
+      <td>
+          <p align="left">  
+              Cellular automata, such as *Conway’s Game of Life*, are computational models consisting of a collection of *cells*
+              and a *transition rule*. Each cell can be in one of several states and its state can be updated by applying the
+              transition rule simulatenously to all cells. We call the state of all cells a generation and we transform one
+              generation of cells to the next by applying the rule to all cells.<br>
+              For example, in Conway’s Game of Life, the cells are arranged on an infinite 2-dimensional board. Each cell can
+              be either *live* or *dead*. The transition rule describes whether a cell will be live or dead in the next generation,
+              depending on the number of live cells bordering any of the four sides of the cell, and whether the cell in question
+              started live or dead. <br>
+          </p> 
+      </td>
+      <td>   
+          <img align="right" width="380" src ="https://blog.datawrapper.de/wp-content/uploads/2021/06/game-of-life-loop-cropped.gif"/> 
+      </td>
+  </tr>
+</table>
 
 ### Configuration
 
@@ -23,15 +42,9 @@ bytes after address.
 | Memory Address   | conf      | 4(conf)   | 8(conf)   | 9(conf)   | 10(conf)  | 11(conf)  |
 
 
-## Celluar Automata
-Cellular automata, such as *Conway’s Game of Life*, are computational models consisting of a collection of *cells*
-and a *transition rule*. Each cell can be in one of several states and its state can be updated by applying the
-transition rule simulatenously to all cells. We call the state of all cells a generation and we transform one
-generation of cells to the next by applying the rule to all cells.
-For example, in Conway’s Game of Life, the cells are arranged on an infinite 2-dimensional board. Each cell can
-be either *live* or *dead*. The transition rule describes whether a cell will be live or dead in the next generation,
-depending on the number of live cells bordering any of the four sides of the cell, and whether the cell in question
-started live or dead.
+## Generating Random Numbers
+
+To generate pseudorandom numbers, the computer starts with an initial configuration, called the seed, algorithmically generating a chaotic sequence of numbers. Due to the deterministic nature of the random number generator, given the same seed twice, the algorithm will produce the same sequence of numbers twice. We will use known seed values to make our random programs reproducible.
 
 
 ## Random Numbers in MIPS ( src/random.s file )
@@ -43,7 +56,7 @@ shows an excerpt of the MARS documentation (accessed by pressing F1 in the simul
 Your task is to implement two functions gen_bit and gen_byte. Assume in both of these functions that the
 random number generator’s seed has already been set, e.g. by the .main program.
 
-> [**random.s**](https://github.com/paritoshparashar/RockPaperScissor-MIPS/blob/main/src/random.s) implement two functions gen_bit and gen_byte. `if (eca != 0)`, we use the ECA to generate a
+> [**random.s**](https://github.com/paritoshparashar/RockPaperScissor-MIPS/blob/main/src/random.s) implements two functions gen_bit and gen_byte. `if (eca != 0)`, we use the ECA to generate a
 random bit. To do this, we read the values skip and column from the configuration struct, simulate the automatonskip times and return the bit in the columnth column of the tape.
 
 
