@@ -52,11 +52,20 @@ To generate pseudorandom numbers, the computer starts with an initial configurat
 The MARS simulator supports several syscalls related to random number generation. Each syscall related
 to random number generators receives as first argument a number uniquely determining the random number
 generator to use. Throughout this project, will always use the random number generator with i.d. 0. Figure 1
-shows an excerpt of the MARS documentation (accessed by pressing F1 in the simulator).
+shows an excerpt of the MARS documentation (accessed by pressing F1 in the simulator). <br> <br>
 Your task is to implement two functions gen_bit and gen_byte. Assume in both of these functions that the
 random number generator’s seed has already been set, e.g. by the .main program.
 
 > [**random.s**](https://github.com/paritoshparashar/RockPaperScissor-MIPS/blob/main/src/random.s) implements two functions gen_bit and gen_byte. `if (eca != 0)`, we use the ECA to generate a
 random bit. To do this, we read the values skip and column from the configuration struct, simulate the automatonskip times and return the bit in the columnth column of the tape.
 
+### random.s -> gen_bit ()
+
+When gen_bit is called, it queries the random number generator for the next number and return its least significant bit.
+
+
+| Service   | Code in $v0 | Arguments                                      | Result                                                                                      |
+|-----------|-------------|------------------------------------------------|---------------------------------------------------------------------------------------------|
+| set seed  | 40          | $a0 = id. of pseudorandom number generator     | No values are returned. Sets the seed of the corresponding underlying Java pseudorandom...  |
+| random int| 41          | $a0 = id. of pseudorandom number generator (any int) | $a0 contains the next pseudorandom, uniformly distributed int value from this random...    |
 
