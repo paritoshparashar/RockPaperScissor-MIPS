@@ -13,7 +13,7 @@ moves for both players, compare their selections and announce the winner!
   <tr>
       <td>
           <p align="left">  
-              Cellular automata, such as *Conway’s Game of Life*, are computational models consisting of a collection of *cells*
+              Cellular automata, such as 🄲🄾🄽🅆🄰🅈’🅂 🄶🄰🄼🄴 🄾🄵 🄻🄸🄵🄴 , are computational models consisting of a collection of *cells*
               and a *transition rule*. Each cell can be in one of several states and its state can be updated by applying the
               transition rule simulatenously to all cells. We call the state of all cells a generation and we transform one
               generation of cells to the next by applying the rule to all cells.<br>
